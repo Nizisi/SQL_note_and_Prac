@@ -1,5 +1,5 @@
 # SQL_note_and_Prac
-## About the API:
+## About the repository:
 It is a archive for the note and possible practice for sql
 ## Source:
 https://sqlbolt.com/
