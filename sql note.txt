@@ -1,0 +1,387 @@
+
+Operator									Condition												SQL Example
+=, !=, < <=, >, >=						Standard numerical operators								col_name != 4
+BETWEEN … AND …						Number is within range of two values (inclusive)				col_name BETWEEN 1.5 AND 10.5
+NOT BETWEEN … AND …					Number is not within range of two values (inclusive)			col_name NOT BETWEEN 1 AND 10
+IN (…)								Number exists in a list	col_name 								IN (2, 4, 6)
+NOT IN (…)							Number does not exist in a list	col_name						NOT IN (1, 3, 5)
+
+
+
+
+
+
+
+
+
+
+
+Operator						Condition																							Example
+=						Case sensitive exact string comparison (notice the single equals)										col_name = "abc"
+
+!= or <>				Case sensitive exact string inequality comparison														col_name != "abcd"
+
+LIKE					Case insensitive exact string comparison																col_name LIKE "ABC"
+
+NOT LIKE				Case insensitive exact string inequality comparison	col_name 											NOT LIKE "ABCD"
+
+%						Used anywhere in a string to match a sequence of zero or more characters (only with LIKE or NOT LIKE)	col_name LIKE "%AT%"
+																																(matches "AT", "ATTIC", "CAT" or even "BATS")
+																					
+_						Used anywhere in a string to match a single character (only with LIKE or NOT LIKE)						col_name LIKE "AN_"
+																																(matches "AND", but not "AN")
+																					
+IN (…)					String exists in a list																					col_name IN ("A", "B", "C")
+
+NOT IN (…)				String does not exist in a list																			col_name NOT IN ("D", "E", "F")
+
+
+!!!All strings must be quoted so that the query parser can distinguish words in the string from SQL keywords.
+!!!full-text search is best left to dedicated libraries like Apache Lucene or Sphinx.
+
+
+
+Filtering and sorting Query results:
+	DISTINCT keyword will blindly remove duplicate rows
+	
+	given column in ascending or descending order using the ORDER BY clause.      ORDER BY column ASC/DESC;
+	
+	
+	Limiting results to a subset:
+	
+			ORDER BY column ASC/DESC
+			LIMIT num_limit OFFSET num_offset;
+			
+			Another clause which is commonly used with the ORDER BY clause are the LIMIT and OFFSET clauses,
+			
+			!!LIMIT will reduce the number of rows to return, 
+			
+			!!and the optional OFFSET will specify where to begin counting the number rows from.
+			
+			they are generally done last after the other clauses have been applied.
+			
+			
+
+SQL Lesson 6: Multi-table queries with JOINs:
+
+	Database normalization:
+	
+			Database normalization is useful because it minimizes duplicate data in any single table, and allows for data in the database to grow independently of each other 
+			
+			
+	Multi-table queries with JOINs:
+	
+			INNER JOIN:  FROM mytable
+						INNER JOIN another_table 
+							ON mytable.id = another_table.id
+							
+				the resulting table only contains data that belongs in both of the tables.
+				
+				The INNER JOIN is a process that matches rows from the first table and the second table which have the same key (as defined by the ON constraint) 
+				to create a result row with the combined columns from both tables. 
+
+
+SQL Lesson 7: OUTER JOINs
+		
+		LEFT JOIN simply includes rows from A regardless of whether a matching row is found in B. 
+		The RIGHT JOIN is the same, but reversed, keeping rows in B regardless of whether a match is found in A. 
+		Finally, a FULL JOIN simply means that rows from both tables are kept, regardless of whether a matching row exists in the other table.
+		
+		When using any of these new joins, you will likely have to write additional logic to deal with NULLs in the result and constraints
+
+
+
+SQL Lesson 8: A short note on NULLs:
+		always good to reduce the possibility of NULL values in databases because they require special attention
+		
+		An alternative to NULL values in your database is to have data-type appropriate default values, like 0 for numerical data, empty strings for text data, etc
+					if your database needs to store incomplete data, then NULL values can be appropriate if the default values will skew later analysis (for example, when taking averages of numerical data).
+					
+					
+		Sometimes, it's also not possible to avoid NULL values, as we saw in the last lesson when outer-joining two tables with asymmetric data. 
+		In these cases, you can test a column for NULL values in a WHERE clause by using either the IS NULL or IS NOT NULL constraint.
+		
+		
+				FROM mytable
+				WHERE column IS/IS NOT NULL
+				
+				
+				
+				
+SQL Lesson 9: Queries with expressions:
+
+		you can also use expressions to write more complex logic on column values in a query. 
+		These expressions can use mathematical and string functions along with basic arithmetic to transform values when the query is executed
+		
+		For example:
+				SELECT particle_speed / 2.0 AS half_particle_speed
+				FROM physics_data
+				WHERE ABS(particle_position) * 10.0 > 500;
+				
+				
+				
+		Each database has its own supported set of mathematical, string, and date functions that can be used in a query, which you can find in their own respective docs.
+		
+		
+		The use of expressions can save time and extra post-processing of the result data, but can also make the query harder to read
+		ecommend that when expressions are used in the SELECT part of the query, that they are also given a descriptive alias using the AS keyword.
+		ex:
+				SELECT col_expression AS expr_description,
+				
+				
+				
+				
+				
+SQL Lesson 10: Queries with aggregates合计;总数 (Pt. 1):
+
+	SQL also supports the use of aggregate expressions (or functions) that allow you to summarize information about a group of rows of data. 
+	
+	
+	Common aggregate functions
+		Here are some common aggregate functions that we are going to use in our examples:
+
+		Function		Description
+		COUNT(*)		A common function used to counts the number of rows in the group if no column name is specified. Otherwise, count the number of rows in the group with non-NULL values in the specified column.
+		COUNT(column)
+		MIN(column)		Finds the smallest numerical value in the specified column for all rows in the group.
+		MAX(column)		Finds the largest numerical value in the specified column for all rows in the group.
+		AVG(column)		Finds the average numerical value in the specified column for all rows in the group.
+		SUM(column)		Finds the sum of all numerical values in the specified column for the rows in the group.
+		
+		
+		
+	Grouped aggregate functions：
+		WHERE constraint_expression
+		GROUP BY column;
+		
+		 create as many results as there are unique groups defined as by the GROUP BY clause
+		 
+		 
+		 
+		 
+SQL Lesson 11: Queries with aggregates (Pt. 2)：
+
+		HAVING clause which is used specifically with the GROUP BY clause to allow us to filter grouped rows from the result set
+		
+		SELECT group_by_column, AGG_FUNC(column_expression) AS aggregate_result_alias, …
+		FROM mytable
+		WHERE condition
+		GROUP BY column
+		HAVING group_condition;
+		
+		The HAVING clause constraints are written the same way as the WHERE clause constraints, and are applied to the grouped rows
+
+
+SQL Lesson 12: Order of execution of a Query
+
+	1. FROM and JOINs
+	The FROM clause, and subsequent JOINs are first executed to determine the total working set of data that is being queried. T
+	his includes subqueries in this clause, and can cause temporary tables to be created under the hood containing all the columns and rows of the tables being joined.
+	
+	2. WHERE
+	Once we have the total working set of data, the first-pass WHERE constraints are applied to the individual rows, and rows that do not satisfy the constraint are discarded
+	Aliases in the SELECT part of the query are not accessible in most databases since they may include expressions dependent on parts of the query that have not yet executed.
+	
+	
+	3. GROUP BY
+	The remaining rows after the WHERE constraints are applied are then grouped based on common values in the column specified in the GROUP BY clause. 
+	As a result of the grouping, there will only be as many rows as there are unique values in that column. 
+	Implicitly, this means that you should only need to use this when you have aggregate functions in your query.
+	
+	4. HAVING
+	If the query has a GROUP BY clause, then the constraints in the HAVING clause are then applied to the grouped rows
+	
+	5. SELECT
+	Any expressions in the SELECT part of the query are finally computed.
+	
+	6. DISTINCT
+	Of the remaining rows, rows with duplicate values in the column marked as DISTINCT will be discarded.
+	
+	7. ORDER BY
+	If an order is specified by the ORDER BY clause, the rows are then sorted by the specified data in either ascending or descending order.
+	
+	8. LIMIT / OFFSET
+	Finally, the rows that fall outside the range specified by the LIMIT and OFFSET are discarded
+	
+	
+	
+	
+SQL Lesson 13: Inserting rows
+
+		What is a Schema?
+				In SQL, the database schema is what describes the structure of each table, and the datatypes that each column of the table can contain.
+				
+				
+		Inserting new data
+		
+			INSERT INTO mytable
+			VALUES (value_or_expr, another_value_or_expr, …),
+				   (value_or_expr_2, another_value_or_expr_2, …),
+				   
+				   
+			In some cases, if you have incomplete data and the table contains columns that support default values, 
+			you can insert rows with only the columns of data you have by specifying them explicitly.
+				   
+			INSERT INTO mytable
+			(column, another_column, …)
+			VALUES (value_or_expr, another_value_or_expr, …),
+				  (value_or_expr_2, another_value_or_expr_2, …),
+		
+		
+		
+		
+			Example Insert statement with expressions
+			INSERT INTO boxoffice
+			(movie_id, rating, sales_in_millions)
+			VALUES (1, 9.9, 283742034 / 1000000);
+
+
+
+SQL Lesson 14: Updating rows
+
+		Update statement with values
+		UPDATE mytable
+		SET column = value_or_expr, 
+			other_column = another_value_or_expr, 
+			…
+		WHERE condition;
+		
+		
+	Taking care:
+			 always write the constraint first and test it in a SELECT query 
+			 
+			 
+			 
+			 
+			 
+SQL Lesson 15: Deleting rows:
+
+	DELETE FROM mytable
+	WHERE condition;
+	
+	
+	
+SQL Lesson 16: Creating tables:
+
+		CREATE TABLE IF NOT EXISTS mytable (
+		column DataType TableConstraint DEFAULT default_value,
+		another_column DataType TableConstraint DEFAULT default_value,
+		…
+	);
+
+		
+		FLOAT, DOUBLE, REAL
+		INTEGER, BOOLEAN
+		CHARACTER(num_chars), VARCHAR(num_chars), TEXT
+		DATE, DATETIME
+		BLOB
+
+
+	Table constraints:
+			https://www.w3schools.com/sql/sql_foreignkey.asp
+			https://sqlbolt.com/lesson/creating_tables
+			
+			PRIMARY KEY,AUTOINCREMENT,UNIQUE,NOT NULL,CHECK (expression),FOREIGN KEY
+			
+			
+			
+			
+SQL Lesson 17: Altering tables
+
+	 a way for you to update your corresponding tables and database schemas by using the ALTER TABLE statement to add, remove, or modify columns and table constraints.
+	 
+	 You need to specify the data type of the column along with any potential table constraints and default values to be applied to both existing and new rows
+	 
+			 ALTER TABLE mytable
+				ADD column DataType OptionalTableConstraint 
+					DEFAULT default_value;\
+					
+					
+			Removing columns
+				ALTER TABLE mytable
+				DROP column_to_be_deleted;
+				
+			Renaming the table
+				ALTER TABLE mytable
+				RENAME TO new_table_name;
+				
+				ALTER TABLE Persons
+				ALTER COLUMN DateOfBirth year;
+				
+				
+				
+				
+				
+SQL Lesson 18: Dropping tables:
+
+	DROP TABLE statement, which differs from the DELETE statement in that it also removes the table schema from the database entirely.
+	
+	Like the CREATE TABLE statement, the database may throw an error if the specified table does not exist, and to suppress that error, you can use the IF EXISTS clause.
+	
+	 if you have another table that is dependent on columns in table you are removing (for example, with a FOREIGN KEY dependency) 
+	 then you will have to either update all dependent tables first to remove the dependent rows or to remove those tables entirely.
+	 
+	 
+	 
+SQL Topic: Subqueries
+	SELECT *
+	FROM sales_associates
+	WHERE salary > 
+	   (SELECT AVG(revenue_generated)
+		FROM sales_associates);
+		
+		
+		
+	Inside a FROM clause, you can JOIN subqueries with other tables, inside a WHERE or HAVING constraint, 
+	you can test expressions against the results of the subquery, and even in expressions in the SELECT clause, which allow you to return data directly from the subquery. 
+	
+	
+	
+	
+	Correlated subqueries
+		each of these inner queries need to be run for each of the rows in the outer query, since the inner query is dependent on the current outer query row.
+		
+		SELECT *
+		FROM employees
+		WHERE salary > 
+		   (SELECT AVG(revenue_generated)
+			FROM employees AS dept_employees
+			WHERE dept_employees.department = employees.department);
+			
+			
+			
+			
+	the IN operator was used to test whether the column value in the current row existed in a fixed list of values
+	When doing this, notice that the inner subquery must select for a column value or expression to produce a list that the outer column value can be tested against.
+	
+			Select query with subquery constraint
+				SELECT *, …
+				FROM mytable
+				WHERE column
+					IN/NOT IN (SELECT another_column
+							   FROM another_table);
+							   
+							   
+							   
+							   
+							   
+SQL Topic: Unions, Intersections & Exceptions"
+
+		UNION and UNION ALL operator allows you to append the results of one query to another assuming that they have the same column count, order and data type
+		
+		SELECT column, another_column
+		   FROM mytable
+		UNION / UNION ALL / INTERSECT / EXCEPT
+		SELECT other_column, yet_another_column
+		   FROM another_table
+		ORDER BY column DESC
+		LIMIT n;
+		
+		
+		If you use the UNION without the ALL, duplicate rows between the tables will be removed from the result.
+		
+		It's not common to use UNIONs, but if you have data in different tables that can't be joined and processed, it can be an alternative to making multiple queries on the database.
+		
+		the INTERSECT operator will ensure that only rows that are identical in both result sets are returned
+		
+		 EXCEPT operator will ensure that only rows in the first result set that aren't in the second are returned. 
