@@ -1,3 +1,4 @@
+# SELECT from World
 ## find whether column string is substring of another column
 	WHERE t1.FullName LIKE CONCAT('%', t2.Name, '%')
  <br/>The function concat is short for concatenate - you can use it to combine two or more strings.<br/>
@@ -16,3 +17,4 @@
 LEFT(s,n) allows you to extract n characters from the start of the string s.
 
    LEFT('Hello world', 4) -> 'Hell'     
+# SELECT from Nobel Tutorial
