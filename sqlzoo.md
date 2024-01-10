@@ -11,3 +11,4 @@
 ## To round up a column
 	ROUND(7253.86, 0)    ->  7254
 	ROUND(7253.86, 1)    ->  7253.9
+ 	ROUND(7253.86,-3)    ->  7000
