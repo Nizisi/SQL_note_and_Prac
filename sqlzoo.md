@@ -9,5 +9,5 @@
 			   REPLACE(name, 'a','')
 		  FROM bbc
 ## To round up a column
-	ROUND(7253.86, 0)    ->  7254<br/>
+	ROUND(7253.86, 0)    ->  7254
 	ROUND(7253.86, 1)    ->  7253.9
