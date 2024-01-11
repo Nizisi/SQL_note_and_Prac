@@ -1,4 +1,3 @@
-# SELECT from World
 ## find whether column string is substring of another column
 	WHERE t1.FullName LIKE CONCAT('%', t2.Name, '%')
  <br/>The function concat is short for concatenate - you can use it to combine two or more strings.<br/>
@@ -34,3 +33,6 @@ WHERE population >= ALL(SELECT population
 ```
 You need the condition population>0 in the sub-query as some countries have null for population.
 ## We can refer to values in the outer SELECT within the inner SELECT.
+## correlated subqueries
+	A correlated subquery works like a nested loop: the subquery only has access to rows related to a single record at a time in the outer query.<br/>
+	One way to interpret the line in the WHERE clause that references the two table is “… where the correlated values are the same”.
