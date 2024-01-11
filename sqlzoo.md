@@ -33,3 +33,4 @@ WHERE population >= ALL(SELECT population
                           WHERE population>0)
 ```
 You need the condition population>0 in the sub-query as some countries have null for population.
+## We can refer to values in the outer SELECT within the inner SELECT.
