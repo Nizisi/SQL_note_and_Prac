@@ -24,3 +24,12 @@ LEFT(s,n) allows you to extract n characters from the start of the string s.
 	WHERE winner = "EUGENE O'NEILL"
  ## In clause can be used as value 1 or 0  (boolean)
  The expression subject IN ('chemistry','physics') can be used as a value - it will be 0 or 1.
+ ## We can use the word ALL to allow >= or > or < or <=to act over a list. 
+```
+SELECT name
+FROM world
+WHERE population >= ALL(SELECT population
+                           FROM world
+                          WHERE population>0)
+```
+You need the condition population>0 in the sub-query as some countries have null for population.
