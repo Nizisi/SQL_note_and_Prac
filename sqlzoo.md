@@ -2,6 +2,7 @@
 ## find whether column string is substring of another column
 	WHERE t1.FullName LIKE CONCAT('%', t2.Name, '%')
  <br/>The function concat is short for concatenate - you can use it to combine two or more strings.<br/>
+ You can also use it to add symbol.
 ## Replace letter in a string value column
 	REPLACE('vessel','e','a') -> 'vassal'
 	
