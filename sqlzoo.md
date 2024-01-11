@@ -21,3 +21,5 @@ LEFT(s,n) allows you to extract n characters from the start of the string s.
 ## When single quote inside quote string already, use two quote
 	SELECT * FROM nobel
 	WHERE winner = "EUGENE O'NEILL"
+ ## In clause can be used as value 1 or 0  (boolean)
+ The expression subject IN ('chemistry','physics') can be used as a value - it will be 0 or 1.
