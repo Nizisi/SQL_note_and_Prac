@@ -37,3 +37,15 @@ You need the condition population>0 in the sub-query as some countries have null
 	A correlated subquery works like a nested loop: the subquery only has access to rows related to a single record at a time in the outer query.
 	One way to interpret the line in the WHERE clause that references the two table is “… where the correlated values are the same”.
  	A correlated subquery is used some action must be taken on each row in your query that depends on one or more values from that row.
+
+  ### example
+  ```
+  SELECT name, continent, population 
+	FROM world w
+	WHERE NOT EXISTS (                  -- there are no countries
+	   SELECT *
+	   FROM world nx
+	   WHERE nx.continent = w.continent -- on the same continent
+	   AND nx.population > 25000000     -- with more than 25M population 
+	   );
+```
