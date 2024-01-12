@@ -48,4 +48,4 @@ You need the condition population>0 in the sub-query as some countries have null
 	   WHERE nx.continent = w.continent -- on the same continent
 	   AND nx.population > 25000000     -- with more than 25M population 
 	   );
-```
+	```
