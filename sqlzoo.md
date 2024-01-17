@@ -48,4 +48,17 @@ You need the condition population>0 in the sub-query as some countries have null
 	   WHERE nx.continent = w.continent -- on the same continent
 	   AND nx.population > 25000000     -- with more than 25M population 
 	   );
-	```
+```
+## GROUP BY and AGGREGATE FUNC
+	Group By X means put all those with the same value for X in the one group.
+
+	Group By X, Y means put all those with the same values for both X and Y in the one group.
+ ### EXAMPLE:
+  ```
+ Show the year and subject where 3 prizes were given. Show only years 2000 onwards.
+	SELECT yr, subject
+	FROM nobel
+	WHERE yr >= 2000
+	GROUP BY yr, subject
+	HAVING COUNT(winner) = 3
+ ```
