@@ -62,3 +62,22 @@ You need the condition population>0 in the sub-query as some countries have null
 	GROUP BY yr, subject
 	HAVING COUNT(winner) = 3
  ```
+## Ways to return different values under different conditions.
+USE CASE WHEN!
+```
+  CASE WHEN condition1 THEN value1 
+       WHEN condition2 THEN value2  
+       ELSE def_value 
+  END
+```
+```
+SELECT mdate,
+  team1,
+  SUM(CASE WHEN teamid=team1 THEN 1 ELSE 0 END) score1,team2,
+  SUM(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) score2
+  FROM game LEFT JOIN goal ON matchid = id
+GROUP BY matchid,team1,team2
+ORDER BY mdate,matchid,team1,team2
+```
+CASE allows you to return different values under different conditions. If there no conditions match (and there is not ELSE) then NULL is returned. <br/>
+GROUP BY refer to above GROUP BY and AGGREGATE FUNC section.
