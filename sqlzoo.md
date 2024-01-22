@@ -81,3 +81,8 @@ ORDER BY mdate,matchid,team1,team2
 ```
 CASE allows you to return different values under different conditions. If there no conditions match (and there is not ELSE) then NULL is returned. <br/>
 GROUP BY refer to above GROUP BY and AGGREGATE FUNC section.
+## COALESCE- way to find  first value that is not null
+```
+  COALESCE(x,y,z) = x if x is not NULL
+  COALESCE(x,y,z) = y if x is NULL and y is not NULL
+```
