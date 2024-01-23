@@ -81,8 +81,10 @@ ORDER BY mdate,matchid,team1,team2
 ```
 CASE allows you to return different values under different conditions. If there no conditions match (and there is not ELSE) then NULL is returned. <br/>
 GROUP BY refer to above GROUP BY and AGGREGATE FUNC section.
-## COALESCE- way to find  first value that is not null
+## COALESCE- way to find  first value that is not null, or return default value if null
 ```
   COALESCE(x,y,z) = x if x is not NULL
   COALESCE(x,y,z) = y if x is NULL and y is not NULL
+
+SELECT name, COALESCE(mobile,'07986 444 2266')  FROM teacher ##this return '07986 444 2266' if mobile is null
 ```
