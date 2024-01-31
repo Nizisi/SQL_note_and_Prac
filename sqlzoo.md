@@ -88,3 +88,12 @@ GROUP BY refer to above GROUP BY and AGGREGATE FUNC section.
 
 SELECT name, COALESCE(mobile,'07986 444 2266')  FROM teacher ##this return '07986 444 2266' if mobile is null
 ```
+## Rank Function
+```
+SELECT party, votes,
+       RANK() OVER (ORDER BY votes DESC) as posn
+  FROM ge
+ WHERE constituency = 'S14000024 ' AND yr = 2017
+ORDER BY party
+
+```
