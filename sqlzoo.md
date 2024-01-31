@@ -89,7 +89,9 @@ GROUP BY refer to above GROUP BY and AGGREGATE FUNC section.
 SELECT name, COALESCE(mobile,'07986 444 2266')  FROM teacher ##this return '07986 444 2266' if mobile is null
 ```
 ## Rank Function
+Returns the rank of each row within the partition of a result set. The rank of a row is one plus the number of ranks that come before the row in question.
 ```
+This query rank the row base on votes desc, so the row with most vote is rank 1 .etc
 SELECT party, votes,
        RANK() OVER (ORDER BY votes DESC) as posn
   FROM ge
