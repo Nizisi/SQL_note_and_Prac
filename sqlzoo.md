@@ -99,3 +99,11 @@ SELECT party, votes,
 ORDER BY party
 
 ```
+PARTITION BY clause divide the table into different blocks, for example below, base on the same yr. 
+```
+SELECT yr,party, votes,
+      RANK() OVER (PARTITION BY yr ORDER BY votes DESC) as posn
+  FROM ge
+ WHERE constituency = 'S14000021'
+ORDER BY party,yr
+```
