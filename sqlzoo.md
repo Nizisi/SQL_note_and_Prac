@@ -107,3 +107,25 @@ SELECT yr,party, votes,
  WHERE constituency = 'S14000021'
 ORDER BY party,yr
 ```
+## LAG function
+The LAG function is used to show data from the preceding row or the table. <br/>
+https://sqlzoo.net/wiki/Window_LAG (detailed graph)
+```
+SELECT name, DAY(whn), confirmed,
+   LAG(whn, 1) OVER (PARTITION BY name ORDER BY whn)   ## this lag function, starting from second row, show the whn from the previous row
+ FROM covid
+WHERE name = 'Italy'
+AND MONTH(whn) = 3 AND YEAR(whn) = 2020
+ORDER BY whn
+
+```
+We can use lag function to calculate difference between rows like example below:
+```
+SELECT name, DAY(whn),
+  (confirmed - LAG(confirmed, 1) OVER (PARTITION BY name ORDER BY whn)) AS day_count
+ FROM covid
+WHERE name = 'Italy'
+AND MONTH(whn) = 3 AND YEAR(whn) = 2020
+ORDER BY whn
+
+```
