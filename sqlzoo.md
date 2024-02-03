@@ -129,3 +129,13 @@ AND MONTH(whn) = 3 AND YEAR(whn) = 2020
 ORDER BY whn
 
 ```
+## Self Join
+https://sqlzoo.net/wiki/Using_a_self_join <br/>
+FOR EXAMPLE:
+```
+We might join the route table with itself on the stop field. The result is a list of all pairs of services which share a stop.
+
+SELECT * FROM route R1, route R2
+
+  WHERE R1.stop=R2.stop;
+```
