@@ -139,3 +139,5 @@ SELECT * FROM route R1, route R2
 
   WHERE R1.stop=R2.stop;
 ```
+## Cross Join
+To get every possible combination of those two tables.
